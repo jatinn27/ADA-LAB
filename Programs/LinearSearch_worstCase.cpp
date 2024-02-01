@@ -73,14 +73,3 @@ int main()
 }
 
 
-// Average Time taken by for input size 10000 is : 0.000095 sec 
-// Average Time taken by for input size 11000 is : 0.00018 sec 
-// Average Time taken by for input size 12000 is : 0.00030 sec 
-// Average Time taken by for input size 13000 is : 0.00048 sec 
-// Average Time taken by for input size 14000 is : 0.00061 sec 
-// Average Time taken by for input size 15000 is : 0.00077 sec 
-// Average Time taken by for input size 16000 is : 0.00092 sec 
-// Average Time taken by for input size 17000 is : 0.00103 sec 
-// Average Time taken by for input size 18000 is : 0.00133 sec 
-// Average Time taken by for input size 19000 is : 0.00156 sec 
-// Average Time taken by for input size 20000 is : 0.00181 sec 

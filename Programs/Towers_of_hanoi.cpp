@@ -3,16 +3,16 @@
 #include <iomanip> // setprecision()
 #include <cstdlib> // clock_t
 using namespace std;
-void towerOfHanoi(int n, char from_rod, char to_rod, char aux_rod)
+
+void towerOfHanoi(int n, char source, char destination, char spare)
 {
-    if (n == 0)
+    if (n >= 1)
     {
-        return;
+        towerOfHanoi(n - 1, source, spare, destination);
+        cout << "Move disc " << n << " from " << source << " to " << destination << endl;
+        ;
+        towerOfHanoi(n - 1, spare, destination, source);
     }
-    towerOfHanoi(n - 1, from_rod, aux_rod, to_rod);
-    // cout << "Move disk " << n << " from rod " << from_rod
-    //      << " to rod " << to_rod << endl;
-    towerOfHanoi(n - 1, aux_rod, to_rod, from_rod);
 }
 
 int main()

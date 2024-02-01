@@ -22,7 +22,7 @@ void print(vector<int> arr)
 }
 int binarySearch(vector<int> &arr, int start, int end, int key)
 {
-    if (start > end)
+    if (start >= end)
     {
         return -1; 
     }
