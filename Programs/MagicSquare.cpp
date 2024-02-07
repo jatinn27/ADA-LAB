@@ -41,18 +41,6 @@ void generateMagicSquare(int n)
     }
 }
 
-void displayMagicSquare(int n)
-{
-    cout << "Magic Square for " << n << "x" << n << ":\n";
-    for (int i = 0; i < n; i++)
-    {
-        for (int j = 0; j < n; j++)
-        {
-            cout << setw(4) << magicSquare[i][j] << " ";
-        }
-        cout << endl;
-    }
-}
 
 int main()
 {
