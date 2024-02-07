@@ -25,8 +25,6 @@ vector<int> randomnumbers(vector<int> arr, int n)
 
     return arr;
 }
-#include <vector>
-#include <algorithm>
 
 vector<int> exactPositionPivot(vector<int> &arr)
 {
@@ -87,46 +85,3 @@ int main()
     return 0;
 }
 
-// Average Time taken by for input size 1000 is : 0.000000 sec 
-
-// Average Time taken by for input size 21000 is : 0.00600 sec 
-
-// Average Time taken by for input size 41000 is : 0.01600 sec 
-
-// Average Time taken by for input size 61000 is : 0.06100 sec 
-
-// Average Time taken by for input size 81000 is : 0.09000 sec 
-
-// Average Time taken by for input size 101000 is : 0.12800 sec 
-
-// Average Time taken by for input size 121000 is : 0.18800 sec 
-
-// Average Time taken by for input size 141000 is : 0.32100 sec 
-
-// Average Time taken by for input size 161000 is : 0.33300 sec 
-
-// Average Time taken by for input size 181000 is : 0.41500 sec 
-
-// Average Time taken by for input size 201000 is : 0.41500 sec
-
-// Average Time taken by for input size 221000 is : 0.55900 sec
-
-// Average Time taken by for input size 241000 is : 0.64200 sec
-
-// Average Time taken by for input size 261000 is : 0.80100 sec
-
-// Average Time taken by for input size 281000 is : 0.82900 sec
-
-// Average Time taken by for input size 301000 is : 0.98300 sec
-
-// Average Time taken by for input size 321000 is : 1.05400 sec
-
-// Average Time taken by for input size 341000 is : 1.18800 sec
-
-// Average Time taken by for input size 361000 is : 1.37400 sec
-
-// Average Time taken by for input size 381000 is : 1.48700 sec
-
-// Average Time taken by for input size 401000 is : 1.53400 sec
-
-// Average Time taken by for input size 421000 is : 1.71900 sec
