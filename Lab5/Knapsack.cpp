@@ -5,14 +5,14 @@
 
 using namespace std;
 
-class item
+class obj
 {
 public:
     float profit;
     float weight;
     float profitByWeight;
 
-    item(float profit, float weight)
+    obj(float profit, float weight)
     {
         this->profit = profit;
         this->weight = weight;
@@ -20,36 +20,36 @@ public:
     }
 };
 
-bool cmpProfit(item a, item b)
+bool cmpProfit(obj a, obj b)
 {
     return b.profit < a.profit;
 }
 
-bool cmpWeight(item a, item b)
+bool cmpWeight(obj a, obj b)
 {
     return b.weight > a.weight;
 }
 
-bool cmpProfitbyWeight(item a, item b)
+bool cmpProfitbyWeight(obj a, obj b)
 {
     return b.profitByWeight < a.profitByWeight;
 }
 
-void greedyKnapsack(vector<item> &items, int maxWeight)
+void greedyKnapsack(vector<obj> &objList, int maxWeight)
 {
-    sort(items.begin(), items.end(), cmpProfitbyWeight);
+    sort(objList.begin(), objList.end(), cmpProfitbyWeight);
     float profit = 0;
 
-    for (int i = 0; i < items.size(); i++)
+    for (int i = 0; i < objList.size(); i++)
     {
-        if (maxWeight >= items[i].weight)
+        if (maxWeight >= objList[i].weight)
         {
-            profit += items[i].profit;
-            maxWeight -= items[i].weight;
+            profit += objList[i].profit;
+            maxWeight -= objList[i].weight;
         }
         else
         {
-            profit += (maxWeight / items[i].weight) * items[i].profit;
+            profit += (maxWeight / objList[i].weight) * objList[i].profit;
             break;
         }
     }
@@ -58,10 +58,10 @@ void greedyKnapsack(vector<item> &items, int maxWeight)
 
 int main()
 {
-    vector<item> items = {item(10, 2), item(5, 3), item(15, 5), item(7, 7), item(6, 1), item(18, 4), item(3, 1)};
+    vector<obj> objList = {obj(10, 2), obj(5, 3), obj(15, 5), obj(7, 7), obj(6, 1), obj(18, 4), obj(3, 1)};
     int maxWeight = 15;
 
-    greedyKnapsack(items, maxWeight);
+    greedyKnapsack(objList, maxWeight);
 
     return 0;
 }
