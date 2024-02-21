@@ -35,7 +35,7 @@ bool cmpProfitbyWeight(item a, item b)
     return b.profitByWeight < a.profitByWeight;
 }
 
-float fractionalKnapsack(vector<item> &items, int maxWeight)
+void greedyKnapsack(vector<item> &items, int maxWeight)
 {
     sort(items.begin(), items.end(), cmpProfitbyWeight);
     float profit = 0;
@@ -53,18 +53,15 @@ float fractionalKnapsack(vector<item> &items, int maxWeight)
             break;
         }
     }
-
-    return profit;
+    cout << "Maximum profit earned is " << setprecision(3) << fixed << profit << endl;
 }
 
 int main()
 {
-    vector<item> items = {item(10, 2),item(5, 3),item(15, 5),item(7, 7),item(6, 1),item(18, 4),item(3, 1)};
+    vector<item> items = {item(10, 2), item(5, 3), item(15, 5), item(7, 7), item(6, 1), item(18, 4), item(3, 1)};
     int maxWeight = 15;
 
-    float maxProfit = fractionalKnapsack(items, maxWeight);
-
-    cout << "Maximum profit earned is " << setprecision(3) << fixed << maxProfit << endl;
+    greedyKnapsack(items, maxWeight);
 
     return 0;
 }
