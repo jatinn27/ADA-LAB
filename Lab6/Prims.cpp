@@ -1,145 +1,133 @@
 #include <iostream>
-#include <vector>
-#include <limits>
+#include "graphAdjMatrix.h"
+#include <limits.h>
+#include <iomanip>
 using namespace std;
 
-vector<int> findMinIndex(vector<vector<int>> &matrix)
+int findMinCostEdge(int vertices, vector<vector<int>> &cost, vector<int> &near)
 {
-    vector<int> minIndex = {-1, -1};
-
-    int minVal = matrix[0][0];
-
-    for (int i = 0; i < matrix.size(); ++i)
+    int minCost = INT_MAX;
+    int minIndex = -1;
+    for (int i = 0; i < vertices; i++)
     {
-        for (int j = 0; j < matrix[i].size(); ++j)
+        if (near[i] != 0 && cost[i][near[i]] != 0 && cost[i][near[i]] < minCost)
         {
-            if (matrix[i][j] < minVal)
+            minCost = cost[i][near[i]];
+            minIndex = i;
+        }
+    }
+    return minIndex;
+}
+
+pair<int, int> minCostedge(vector<vector<int>> &cost)
+{
+    int minCost = INT_MAX;
+    int k, l;
+    for (int i = 0; i < cost.size(); i++)
+    {
+        for (int j = 0; j < cost[i].size(); j++)
+        {
+            if (cost[i][j] != 0 && cost[i][j] < minCost)
             {
-                minVal = matrix[i][j];
-                minIndex[0] = i;
-                minIndex[1] = j;
+                minCost = cost[i][j];
+                k = i;
+                l = j;
             }
         }
     }
 
-    return minIndex;
+    return {k, l};
 }
-
-int findindex( int minCost,int n, vector<int> &near, vector<vector<int>> &cost)
+int primAlgorithm(vector<vector<int>> &cost, int vertices, vector<vector<int>> &t)
 {
-    int j = -1;
-
-    for (int i = 0; i < n; i++)
-    {
-        if (near[i] != 0 && cost[i][near[i]] < minCost)
-        {
-            j = i;
-        }
-    }
-
-    return j;
-}
-
-void prims(vector<vector<int>> &edges, vector<vector<int>> &cost, int n, vector<vector<int>> &t)
-{
-    vector<int> minEdge = findMinIndex(cost);
-    int k = minEdge[0];
-    int l = minEdge[1];
-    vector<int> near(n, -1);
-
-    for (int i = 0; i < n; i++)
-    {
-        if (cost[i][k] < cost[i][l])
-        {
-            near[i] = k;
-        }
-        else
-        {
-            near[i] = l;
-        }
-    }
-
+    // let (k,l) be an edge of minimum cost in E;
+    pair<int, int> minEdge = minCostedge(cost);
+    int k = minEdge.first;
+    int l = minEdge.second;
+    int minCost = 0;
+    minCost = cost[k][l];
     t[0][0] = k;
     t[0][1] = l;
 
+    vector<int> near(vertices, -1);
+
+    for (int i = 0; i < vertices; i++)
+    {
+        if (cost[i][l] < cost[i][k])
+        {
+            if (cost[i][l] != 0)
+            {
+                near[i] = l;
+            }
+            else
+            {
+                near[i] = k;
+            }
+        }
+        else if (cost[i][l] > cost[i][k])
+        {
+            if (cost[i][k] != 0)
+            {
+                near[i] = k;
+            }
+            else
+            {
+                near[i] = l;
+            }
+        }
+    }
     near[k] = near[l] = 0;
 
-    for(int i=0;i<n;i++){
-        cout<<near[i]<<" ";
+    for (int i = 1; i < t.size(); i++)
+    {
+        // let j be an index suzh that near[j] != 0 and cost[j,near[j]] is minimum;
+        int j = findMinCostEdge(vertices, cost, near);
+        t[i][0] = j;
+        t[i][1] = near[j];
+        minCost = minCost + cost[j][near[j]];
+        near[j] = 0;
+
+        for (int k = 0; k < vertices; k++)
+        { // updatte near[]
+            if (near[k] != 0 && cost[k][j] != 0 && cost[k][near[k]] > cost[k][j])
+            {
+                near[k] = j;
+            }
+        }
     }
 
-    // int minCost = cost[k][l];
-
-    // for (int i = 1; i < n - 1; i++)
-    // {
-    //     int j = findindex(minCost, n, near, cost);
-    //     t[i][0] = j;
-    //     t[i][1] = near[j];
-
-    //     minCost += cost[j][near[j]];
-    //     near[j] = 0;
-
-    //     for (int k = 1; k < n; k++)
-    //     {
-    //         if ((near[k] != 0) && (cost[k][near[k]] > cost[k][j]))
-    //         {
-    //             near[k] = j;
-    //         }
-    //     }
-    // }
-
-    // return minCost;
-
+    return minCost;
 }
 
 int main()
 {
-    int n = 6;
-    int infinity = numeric_limits<int>::max();
+    int vertices;
+    cout << "Enter the no. of vertices in the graph: ";
+    cin >> vertices;
+    int edges;
+    cout << "Enter the no. of edges in the graph: ";
+    cin >> edges;
+    Graph g(vertices, edges, 0);
 
-    vector<vector<int>> cost(n, vector<int>(n, infinity));
+    g.makeMatrix();
+    cout << "-----------------------------" << endl;
+    g.displayMatrix();
+    cout << "-----------------------------" << endl;
+    pair<vector<vector<int>>, vector<vector<int>>> getInput = g.result();
+    vector<vector<int>> t(vertices - 1, vector<int>(2, -1));
+    int minCost = primAlgorithm(getInput.first, vertices, t);
 
-    vector<vector<int>> t(n - 1, vector<int>(2));
+    cout << "Min cost of spanning tree is " << minCost << endl;
 
-
-    cost[0][4] = 9;
-    cost[4][0] = 9;
-    cost[0][1] = 3;
-    cost[1][0] = 3;
-    cost[0][5] = 4;
-    cost[5][0] = 4;
-    cost[5][2] = 7;
-    cost[2][5] = 7;
-    cost[1][5] = 2;
-    cost[5][1] = 2;
-    cost[1][4] = 3;
-    cost[4][1] = 3;
-    cost[4][3] = 6;
-    cost[3][4] = 6;
-    cost[5][3] = 8;
-    cost[3][5] = 8;
-    cost[5][4] = 5;
-    cost[4][5] = 5;
-    cost[0][0] = 0;
-    cost[1][1] = 0;
-    cost[2][2] = 0;
-    cost[3][3] = 0;
-    cost[4][4] = 0;
-    cost[5][5] = 0;
-
-
-    for (int i = 0; i < n; i++)
+    cout << "-----------------------------" << endl;
+    cout << "Edges in the spanning tree: " << endl;
+    for (auto i : t)
     {
-        for (int j = 0; j < n; j++)
+        for (auto j : i)
         {
-            cout << cost[i][j] << " ";
+            cout << j << " ";
         }
         cout << endl;
     }
-
-    // int minCost = prims(edges, cost, n, t);
-
-    // cout << "Min cost is " << minCost;
-
     return 0;
 }
