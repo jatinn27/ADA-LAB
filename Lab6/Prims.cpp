@@ -4,19 +4,21 @@
 #include <iomanip>
 using namespace std;
 
-int findMinCostEdge(int vertices, vector<vector<int>> &cost, vector<int> &near)
+// near[i] == -2 means visited to handle vertex 0
+
+int findMinCostVertex(int vertices, vector<vector<int>> &cost, vector<int> &near)
 {
     int minCost = INT_MAX;
-    int minIndex = -1;
+    int minVertex = -1;
     for (int i = 0; i < vertices; i++)
     {
-        if (near[i] != 0 && cost[i][near[i]] != 0 && cost[i][near[i]] < minCost)
+        if (near[i] != -2 && cost[i][near[i]] != 0 && cost[i][near[i]] < minCost)
         {
             minCost = cost[i][near[i]];
-            minIndex = i;
+            minVertex = i;
         }
     }
-    return minIndex;
+    return minVertex;
 }
 
 pair<int, int> minCostedge(vector<vector<int>> &cost)
@@ -76,20 +78,21 @@ int primAlgorithm(vector<vector<int>> &cost, int vertices, vector<vector<int>> &
             }
         }
     }
-    near[k] = near[l] = 0;
+    near[k] = near[l] = -2;
 
     for (int i = 1; i < t.size(); i++)
     {
-        // let j be an index suzh that near[j] != 0 and cost[j,near[j]] is minimum;
-        int j = findMinCostEdge(vertices, cost, near);
+        // let j be an index/vertex such that near[j] != 0 and cost[j,near[j]] is minimum;
+        int j = findMinCostVertex(vertices, cost, near);
         t[i][0] = j;
         t[i][1] = near[j];
         minCost = minCost + cost[j][near[j]];
-        near[j] = 0;
+        near[j] = -2;
 
         for (int k = 0; k < vertices; k++)
-        { // updatte near[]
-            if (near[k] != 0 && cost[k][j] != 0 && cost[k][near[k]] > cost[k][j])
+        { // update near[]
+            
+            if (near[k] != -2 && cost[k][j] != 0 && cost[k][near[k]] > cost[k][j])
             {
                 near[k] = j;
             }
