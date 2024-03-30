@@ -1,6 +1,8 @@
 #include <iostream>
-#include<algorithm>
+#include <algorithm>
 #include <vector>
+#include <cstdlib>
+#include <ctime>
 using namespace std;
 
 class activity
@@ -25,12 +27,13 @@ vector<activity> generateRandomActivities(int numActivities)
     for (int i = 0; i < numActivities; ++i)
     {
         int start = rand() % 10;
-        int duration = rand() % (10 - start) + 1; // Ensure duration is at least 1
+        int duration = rand() % (10 - start) + 1; 
         activities.push_back(activity(start, start + duration));
     }
 
     return activities;
 }
+
 bool cmpDuration(activity a, activity b)
 {
     return b.duration > a.duration;
@@ -64,19 +67,22 @@ vector<int> greedyActivitySelector(vector<activity> &activities)
     return solution;
 }
 
-int sortFinish(vector<activity> &activities){
-    sort(activities.begin(),activities.end(),cmpEnd);
+int sortFinish(vector<activity> &activities)
+{
+    sort(activities.begin(), activities.end(), cmpEnd);
     vector<int> finish = greedyActivitySelector(activities);
     return finish.size();
 }
 
-int sortDuration(vector<activity> &activities){
+int sortDuration(vector<activity> &activities)
+{
     sort(activities.begin(), activities.end(), cmpDuration);
     vector<int> duration = greedyActivitySelector(activities);
     return duration.size();
 }
 
-int sortStart(vector<activity> &activities){
+int sortStart(vector<activity> &activities)
+{
     sort(activities.begin(), activities.end(), cmpStart);
     vector<int> start = greedyActivitySelector(activities);
     return start.size();
@@ -84,5 +90,25 @@ int sortStart(vector<activity> &activities){
 
 int main()
 {
+    int numActivities = 10; 
+    vector<activity> activities = generateRandomActivities(numActivities);
 
+    cout << "Activities:" << endl;
+    for (int i = 0; i < numActivities; ++i)
+    {
+        cout << "Activity " << i + 1 << ": Start=" << activities[i].start << ", Finish=" << activities[i].finish << endl;
+    }
+
+    cout << endl;
+
+    int maxActivitiesFinish = sortFinish(activities);
+    cout << "Maximum non-overlapping activities (sorted by finish time): " << maxActivitiesFinish << endl;
+
+    int maxActivitiesDuration = sortDuration(activities);
+    cout << "Maximum non-overlapping activities (sorted by duration): " << maxActivitiesDuration << endl;
+
+    int maxActivitiesStart = sortStart(activities);
+    cout << "Maximum non-overlapping activities (sorted by start time): " << maxActivitiesStart << endl;
+
+    return 0;
 }

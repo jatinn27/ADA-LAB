@@ -4,9 +4,16 @@
 #include <cstdlib> // clock_t
 using namespace std;
 
+void print(vector<int> &arr){
+    for(int i=0;i<arr.size();i++){
+        cout<<arr[i]<<" ";
+    }
+    cout<<endl;
+}
+
 vector<int> randomnumbers(vector<int> arr, int n)
 {
-    int N = 100; 
+    int N = 100; // This function will generate random numbers for n=50 it will generate 50 numbers
     for (int i = 0; i < n; i++)
     {
         arr.push_back(rand() % N);
@@ -41,39 +48,18 @@ int partition(vector<int> &arr,int start,int end){
     return pivotIndex;
 }
 
-int kthSmallestElement(vector<int> &arr, int k)
-{
-    int start = 0;
-    int end = arr.size() - 1;
-    int ans = -1;
-
-    while (start <= end)
-    {
-        int p = partition(arr, start, end);
-
-        if (p == k - 1)
-        {
-            ans = arr[p];
-            break;
-        }
-        else if (p < k - 1)
-        {
-            start = p + 1;
-        }
-        else
-        {
-            end = p - 1;
-        }
+void quickSort(vector<int> &arr,int s,int e){
+    if(s<e){
+        int q = partition(arr,s,e);
+        quickSort(arr,s,q-1);
+        quickSort(arr,q+1,e);
     }
-
-    return ans;
 }
 
-int main()
-{
+int main(){
     vector<int> arr; // creating a dynamic array
 
-    for(int input_size=100;input_size<10000;input_size = input_size +100){
+    for(int input_size=500;input_size<10000;input_size = input_size +100){
 
 
     // generating random numbers
@@ -85,7 +71,7 @@ int main()
     start = clock();
 
     for (int i = 0; i < 100; i++)
-        kthSmallestElement(arr,input_size/2);
+        quickSort(arr,0,arr.size()-1);
 
     end = clock();
 
@@ -100,27 +86,28 @@ int main()
     cout << " sec " << endl;
 
     }
-
+    
     return 0;
 }
 
+// Average Time taken by for input size 500 is : 0.034000 sec
 
-// Average Time taken by for input size 100 is : 0.001000 sec 
+// Average Time taken by for input size 600 is : 0.16300 sec
 
-// Average Time taken by for input size 200 is : 0.00400 sec 
+// Average Time taken by for input size 700 is : 0.43700 sec
 
-// Average Time taken by for input size 300 is : 0.01700 sec 
+// Average Time taken by for input size 800 is : 0.92900 sec
 
-// Average Time taken by for input size 400 is : 0.05100 sec 
+// Average Time taken by for input size 900 is : 1.65200 sec
 
-// Average Time taken by for input size 500 is : 0.09700 sec 
+// Average Time taken by for input size 1000 is : 2.66500 sec
 
-// Average Time taken by for input size 600 is : 0.15100 sec 
+// Average Time taken by for input size 1100 is : 4.23600 sec
 
-// Average Time taken by for input size 700 is : 0.25100 sec 
+// Average Time taken by for input size 1200 is : 6.30100 sec 
 
-// Average Time taken by for input size 800 is : 0.34400 sec 
+// Average Time taken by for input size 1300 is : 9.01200 sec 
 
-// Average Time taken by for input size 900 is : 0.53600 sec 
+// Average Time taken by for input size 1400 is : 12.31600 sec 
 
-// Average Time taken by for input size 1000 is : 0.71700 sec 
+// Average Time taken by for input size 1500 is : 16.58200 sec

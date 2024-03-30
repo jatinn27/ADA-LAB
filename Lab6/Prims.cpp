@@ -12,7 +12,7 @@ int findMinCostVertex(int vertices, vector<vector<int>> &cost, vector<int> &near
     int minVertex = -1;
     for (int i = 0; i < vertices; i++)
     {
-        if (near[i] != -2 && cost[i][near[i]] != 0 && cost[i][near[i]] < minCost)
+        if (near[i] != -2 && cost[i][near[i]] < minCost && i != near[i])
         {
             minCost = cost[i][near[i]];
             minVertex = i;
@@ -29,7 +29,7 @@ pair<int, int> minCostedge(vector<vector<int>> &cost)
     {
         for (int j = 0; j < cost[i].size(); j++)
         {
-            if (cost[i][j] != 0 && cost[i][j] < minCost)
+            if (cost[i][j] < minCost && i != j)
             {
                 minCost = cost[i][j];
                 k = i;
@@ -57,25 +57,11 @@ int primAlgorithm(vector<vector<int>> &cost, int vertices, vector<vector<int>> &
     {
         if (cost[i][l] < cost[i][k])
         {
-            if (cost[i][l] != 0)
-            {
-                near[i] = l;
-            }
-            else
-            {
-                near[i] = k;
-            }
+            near[i] = l;
         }
-        else if (cost[i][l] > cost[i][k])
+        else
         {
-            if (cost[i][k] != 0)
-            {
-                near[i] = k;
-            }
-            else
-            {
-                near[i] = l;
-            }
+            near[i] = k;
         }
     }
     near[k] = near[l] = -2;
@@ -91,8 +77,8 @@ int primAlgorithm(vector<vector<int>> &cost, int vertices, vector<vector<int>> &
 
         for (int k = 0; k < vertices; k++)
         { // update near[]
-            
-            if (near[k] != -2 && cost[k][j] != 0 && cost[k][near[k]] > cost[k][j])
+
+            if (near[k] != -2 && cost[k][near[k]] > cost[k][j] && k!=near[k] && k!=j)
             {
                 near[k] = j;
             }

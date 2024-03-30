@@ -1,113 +1,75 @@
 #include <iostream>
-#include <list>
-#include <unordered_map>
-#include <climits>
-
+#include "graphAdjMatrix.h"
+#include <limits.h>
 using namespace std;
 
-template <typename T>
-class graph
+void SSSP(int v, vector<vector<int>> &cost, vector<int> &dist, int n)
 {
-public:
-    unordered_map<T, list<pair<T, int>>> adjList;
-
-    void addEdges(T u, T v, bool direction, int wt)
+    vector<bool> s(n, false);
+    for (int i = 0; i < n; i++)
     {
-        if (direction == 1)
-        {
-            adjList[u].push_back(make_pair(v, wt));
-        }
-        else
-        {
-            adjList[u].push_back(make_pair(v, wt));
-            adjList[v].push_back(make_pair(u, wt));
-        }
+        dist[i] = cost[v][i];
     }
 
-    void printAdjList()
+    s[v] = true;
+    dist[v] = 0;
+
+    for (int i = 0; i < n - 1; i++)
     {
-        for (auto i : adjList)
+        int minDist = INT_MAX;
+        int u = -1;
+
+        for (int i = 0; i < dist.size(); i++)
         {
-            cout << i.first << " -> {";
-            for (auto j : i.second)
+            if (s[i] != true && dist[i] < minDist)
             {
-                cout << "(" << j.first << "," << j.second << ")";
-            }
-
-            cout << "}" << endl;
-        }
-    }
-
-    unordered_map<T, int> singleSourceShortestPath(T src)
-    {
-        unordered_map<T, bool> visited;
-        unordered_map<T, int> distance;
-
-        for (auto i : adjList)
-        {
-            visited[i.first] = false;
-            distance[i.first] = INT_MAX; 
-        }
-
-        visited[src] = true;
-        distance[src] = 0;
-
-        for (int i = 0; i < adjList.size() - 1; i++)
-        {
-            T u;
-            int minDist = INT_MAX;
-            for (auto i : adjList)
-            {
-                if (!visited[i.first] && distance[i.first] < minDist)
-                {
-                    u = i.first;
-                    minDist = distance[i.first];
-                }
-            }
-
-            visited[u] = true;
-
-            for (auto nbr : adjList[u])
-            {
-                T v = nbr.first;
-                int wt = nbr.second;
-                if (!visited[v] && distance[u] != INT_MAX && distance[u] + wt < distance[v])
-                {
-                    distance[v] = distance[u] + wt;
-                }
+                minDist = dist[i];
+                u = i;
             }
         }
 
-        return distance;
-    }
-};
+        s[u] = true;
 
+        for (int i = 0; i < n; i++)
+        {
+            if (s[i] != true && dist[i] > cost[u][i] + dist[u] && u!=i)
+            {
+                dist[i] = cost[u][i] + dist[u];
+            }
+        }
+    }
+}
 int main()
 {
-    graph<int> g;
-    g.addEdges(0, 1, true, 4);
-    g.addEdges(0, 7, true, 8);
-    g.addEdges(1, 2, true, 8);
-    g.addEdges(1, 7, true, 11);
-    g.addEdges(2, 3, true, 7);
-    g.addEdges(2, 8, true, 2);
-    g.addEdges(2, 5, true, 4);
-    g.addEdges(3, 4, true, 9);
-    g.addEdges(3, 5, true, 14);
-    g.addEdges(4, 5, true, 10);
-    g.addEdges(5, 6, true, 2);
-    g.addEdges(6, 7, true, 1);
-    g.addEdges(6, 8, true, 6);
-    g.addEdges(7, 8, true, 7);
+    int vertices;
+    cout << "Enter the no. of vertices in the graph: ";
+    cin >> vertices;
+    int edges;
+    cout << "Enter the no. of edges in the graph: ";
+    cin >> edges;
+    Graph g(vertices, edges, 0);
 
-    cout << "Adjacency List:\n";
-    g.printAdjList();
-    cout << "\nSingle Source Shortest Path from vertex 0:\n";
-    unordered_map<int, int> distances = g.singleSourceShortestPath(0);
-    for (auto i : distances)
+    g.makeMatrix();
+    cout << "-----------------------------" << endl;
+    g.displayMatrix();
+    cout << "-----------------------------" << endl;
+
+    pair<vector<vector<int>>, vector<vector<int>>> getInput = g.result();
+
+    vector<vector<int>> cost = getInput.first;
+
+    vector<int> dist(vertices, INT_MAX);
+
+    int source_vertex = 0; 
+
+    SSSP(source_vertex, cost, dist, vertices);
+
+    cout << "Shortest distances from vertex " << source_vertex << " to all other vertices:" << endl;
+
+    for (int i = 0; i < vertices; i++)
     {
-        cout << "Vertex: " << i.first << ", Distance: " << i.second << endl;
-    }
 
+        cout << "Distance to vertex " << i << ": " << dist[i] << endl;
+    }
     return 0;
 }

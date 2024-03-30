@@ -1,8 +1,20 @@
 #include <iostream>
+#include <limits.h>
 #include <vector>
-#include<climits>
+#include <iomanip>
+#include <cstdlib>
 using namespace std;
 
+vector<int> randomnumbers(vector<int> arr, int n)
+{
+    int N = 100;
+    for (int i = 0; i < n; i++)
+    {
+        arr.push_back(rand() % N);
+    }
+
+    return arr;
+}
 void MaxMin(vector<int> &arr, int start, int end, int &max, int &min)
 {
     if (start == end)
@@ -37,15 +49,61 @@ void MaxMin(vector<int> &arr, int start, int end, int &max, int &min)
 
 int main()
 {
-    vector<int> arr = {3, 1, 4, 1, 5, 9, 2, 6, 5, 3};
-    int n = arr.size();
+    vector<int> arr;
     int max_val = INT_MIN;
     int min_val = INT_MAX;
 
-    MaxMin(arr, 0, n - 1, max_val, min_val);
+    int input_size = 10000;
+    do
+    {
+        arr = randomnumbers(arr, input_size);
 
-    cout << "Max value: " << max_val << endl;
-    cout << "Min value: " << min_val << endl;
+        clock_t start, end;
+        int x = 0;
+        start = clock();
+
+        for (int i = 0; i < 100; i++)
+            MaxMin(arr, 0, arr.size()-1,max_val,min_val);
+
+        end = clock();
+
+        double time_taken = double(end - start) / CLOCKS_PER_SEC;
+        double average_time = time_taken / 100;
+
+        cout << "\nAverage Time taken by for input size " << input_size << " is : " << fixed
+             << average_time << setprecision(5);
+        cout << " sec " << endl;
+        input_size = input_size + 10000;
+    } while (input_size < 200000);
 
     return 0;
 }
+
+// Average Time taken by for input size 10000 is : 0.000080 sec 
+
+// Average Time taken by for input size 20000 is : 0.00032 sec 
+
+// Average Time taken by for input size 30000 is : 0.00074 sec 
+
+// Average Time taken by for input size 40000 is : 0.00134 sec 
+
+// Average Time taken by for input size 50000 is : 0.00183 sec 
+
+// Average Time taken by for input size 60000 is : 0.00280 sec 
+
+// Average Time taken by for input size 70000 is : 0.00346 sec 
+// Average Time taken by for input size 120000 is : 0.00983 sec
+
+// Average Time taken by for input size 130000 is : 0.01107 sec
+
+// Average Time taken by for input size 140000 is : 0.01329 sec
+
+// Average Time taken by for input size 150000 is : 0.01486 sec
+
+// Average Time taken by for input size 160000 is : 0.01857 sec
+
+// Average Time taken by for input size 170000 is : 0.02309 sec
+
+// Average Time taken by for input size 180000 is : 0.02406 sec
+
+// Average Time taken by for input size 190000 is : 0.02927 sec

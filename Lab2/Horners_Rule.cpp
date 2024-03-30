@@ -14,7 +14,6 @@ void randomnumbers(vector<int> &arr, int n)
     }
 }
 
-// Horner's Rule implementation
 int hornerRule(const vector<int> &arr, int m, int n, int x)
 {
     if (m == n)
