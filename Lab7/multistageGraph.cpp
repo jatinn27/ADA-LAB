@@ -1,94 +1,99 @@
-#include<stdio.h>
-#include<conio.h>
-#define max 10
+#include <iostream>
+#include <vector>
+
+#define MAX_NODES 10
 #define INFINITY 1000
-int w[max][max];
-int n_size;
-int p[max];
-void in_dat()
+
+using namespace std;
+
+vector<vector<int>> graph(MAX_NODES, vector<int>(MAX_NODES, 0));
+vector<int> path(MAX_NODES, -1);
+int numNodes;
+
+void initializeGraph()
 {
-    printf("\n\t Multi-Stage Graph \n");
-    printf("\n Enter the number of nodes : ");
-    scanf("%d",&n_size);
-    int i;
-    for(i=0; i<n_size; i++)
+    cout << "\nEnter the number of nodes: ";
+    cin >> numNodes;
+
+    for (int i = 0; i < numNodes; i++)
     {
-        w[i][i] = 0;
-        for(int j=i+1; j<n_size; j++)
+        graph[i][i] = 0;
+        for (int j = i + 1; j < numNodes; j++)
         {
-            printf("Enter the weight of edge '%c' to '%c': ",65+i,65+j);
-            scanf("%d",&w[i][j]);
-            w[j][i] = 0;
+            cout << "Enter the weight of edge '" << char('A' + i) << "' to '" << char('A' + j) << "': ";
+            cin >> graph[i][j];
+            graph[j][i] = 0;
         }
     }
 }
-void dis_dat()
+
+void displayGraph()
 {
-    printf("\n The Path adjacent matrix \n");
-    printf("\n ");
-    for(int i=0; i<n_size; i++)
+    cout << "\nThe Path adjacent matrix\n";
+    for (int i = 0; i < numNodes; i++)
     {
-        printf("\n");
-        for(int j=0; j<n_size; j++)
-            printf("\t %d",w[i][j]);
+        cout << "\n";
+        for (int j = 0; j < numNodes; j++)
+            cout << "\t" << graph[i][j];
     }
-    getch();
-    fflush(stdin);
 }
-int findshort(int sr,int dst)
+
+int findShortest(int src, int dst)
 {
-    if(sr == dst)
+    if (src == dst)
         return 0;
     else
     {
         int ret = -1;
-        int min = INFINITY;
-        int tdst;
-        for(int i=0; i<n_size; i++)
+        int minDist = INFINITY;
+        int tmpDst;
+        for (int i = 0; i < numNodes; i++)
         {
-            if(w[sr][i] != 0)
+            if (graph[src][i] != 0)
             {
                 ret = 0;
-                tdst = w[sr][i]+findshort(i,dst);
-                if(min >tdst)
+                tmpDst = graph[src][i] + findShortest(i, dst);
+                if (minDist > tmpDst)
                 {
-                    min = tdst;
-                    p[sr] = i;
+                    minDist = tmpDst;
+                    path[src] = i;
                 }
             }
         }
-        if(ret == -1)
+        if (ret == -1)
             return INFINITY;
-        else        return min;
+        else
+            return minDist;
     }
 }
-void MSG()
+
+void findAndDisplayShortestPath()
 {
-    char s,d;
-    int si,di;
-    printf("\nEnter the source and destination node : ");
-    scanf("%c %c",&s,&d);
-    fflush(stdin);
-    si = (int) s-65;
-    di = (int) d-65;
-    int dist = findshort(si,di);
-    if(dist >= INFINITY)
-        printf("\n The shortest distance between '%c' and '%c' can't be computed");
+    char src, dst;
+    int srcIndex, dstIndex;
+    cout << "\nEnter the source and destination node: ";
+    cin >> src >> dst;
+    srcIndex = src - 'A';
+    dstIndex = dst - 'A';
+    int dist = findShortest(srcIndex, dstIndex);
+    if (dist >= INFINITY)
+        cout << "\nThe shortest distance between '" << src << "' and '" << dst << "' can't be computed";
     else
     {
-        printf("\n The shortest distance between '%c' and '%c' : %d",s,d,dist);
-        printf("\n The shortest path : %c",s);
-        while(si!=di)
+        cout << "\nThe shortest distance between '" << src << "' and '" << dst << "': " << dist;
+        cout << "\nThe shortest path: " << src;
+        while (srcIndex != dstIndex)
         {
-            printf(" %c",65+p[si]);
-            si = p[si];
+            cout << " " << char('A' + path[srcIndex]);
+            srcIndex = path[srcIndex];
         }
     }
 }
+
 int main()
 {
-    in_dat();
-    dis_dat();
-    MSG();
+    initializeGraph();
+    displayGraph();
+    findAndDisplayShortestPath();
     return 0;
 }
