@@ -1,9 +1,9 @@
 #include <iostream>
-#include<vector>
+#include <vector>
 using namespace std;
 class GraphColor
 {
-  int n, m,colors;
+  int n, m, colors;
   vector<vector<int>> G;
   vector<int> x;
 
@@ -12,7 +12,7 @@ public:
   {
     n = vertices;
     m = edges;
-    colors=c;
+    colors = c;
     G.resize(n + 1);
     x.resize(n + 1);
     for (int i = 0; i <= n; i++)
@@ -49,7 +49,7 @@ public:
         int i;
         for (i = 1; i <= n; i++)
         {
-          if (G[k][i] != 0 && G[k][i] != 1e9 && x[k]==x[i])
+          if (G[k][i] != 0 && G[k][i] != 1e9 && x[k] == x[i])
           {
             break;
           }
@@ -64,10 +64,10 @@ public:
     do
     {
       nextColor(k);
-      if(x[k]==0)
+      if (x[k] == 0)
       {
         cout << "Not possible to color the graph\n";
-        return ;
+        return;
       }
       else
       {
@@ -89,15 +89,15 @@ public:
 };
 int main()
 {
-  int n, m,c;
+  int n, m, c;
   cout << "Enter number of vertices ";
   cin >> n;
   cout << "\nEnter number of edges ";
   cin >> m;
-  cout << "Enter number of colors available " ; 
-  cin >>c ;
+  cout << "Enter number of colors available ";
+  cin >> c;
 
-  GraphColor G(n, m,c);
+  GraphColor G(n, m, c);
   G.createGraph();
   G.mColor(1);
 

@@ -3,7 +3,7 @@
 #include <limits.h>
 using namespace std;
 
-void Snapshot(const vector<vector<int>>& s, int i, int j) {
+void Snapshot(vector<vector<int>>& s, int i, int j) {
     if (i == j)
         cout << "A" << i - 1;
     else {
